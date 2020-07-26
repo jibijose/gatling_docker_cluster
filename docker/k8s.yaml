@@ -15,7 +15,7 @@ spec:
         version: v1
     spec:
       containers:
-        - image: registry.hub.docker.com/jibijose/inprogress:latest
+        - image: registry.hub.docker.com/jibijose/gatlingcluster:latest
           imagePullPolicy: Always
           name: gatlingcluster
           resources:
@@ -25,29 +25,6 @@ spec:
             limits:
               memory: 2Gi
               cpu: 1000m
-          startupProbe:
-            exec:
-                command:
-                - cat
-                - /gatling_run_dir/gatling-charts-highcharts-bundle-3.3.1/conf/gatling-akka.conf
-            initialDelaySeconds: 30
-            periodSeconds: 20
-            failureThreshold: 30
-            periodSeconds: 10
-          readinessProbe:
-            exec:
-                command:
-                - cat
-                - /gatling_run_dir/gatling-charts-highcharts-bundle-3.3.1/conf/gatling-akka.conf
-            initialDelaySeconds: 5
-            periodSeconds: 5
-          livenessProbe:
-            exec:
-                command:
-                - cat
-                - /gatling_run_dir/gatling-charts-highcharts-bundle-3.3.1/conf/gatling-akka.conf
-            initialDelaySeconds: 5
-            periodSeconds: 5
           volumeMounts:
             - name: config
               mountPath: /gatling_run_dir/gatling-charts-highcharts-bundle-3.3.1/copied-run-files
