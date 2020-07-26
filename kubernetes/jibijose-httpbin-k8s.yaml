@@ -1,0 +1,81 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: httpbin
+spec:
+  selector:
+    matchLabels:
+        app: httpbin
+        version: v1
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: httpbin
+        version: v1
+    spec:
+      containers:
+        - image: registry.hub.docker.com/jibijose/httpbin:jdk8-latest
+          imagePullPolicy: IfNotPresent
+          name: httpbin
+          ports:
+            - containerPort: 8080
+              name: app-port
+          env:
+            - name: JVM_OPTS
+              value: "-XX:+UnlockExperimentalVMOptions -XX:+UseCGroupMemoryLimitForHeap -XX:MinRAMPercentage=40.0 -XX:MaxRAMPercentage=70.0"
+            - name: LOG_OPTS
+              value: "-Dlogging.appender.file.base.path=/var/log -Dlogging.appender.console.level=OFF -Dlogging.appender.file.level=DEBUG"
+          resources:
+            requests:
+              memory: 256Mi
+              cpu: 125m
+            limits:
+              memory: 1Gi
+              cpu: 500m
+          volumeMounts:
+            - mountPath: /var/log
+              name: log-volume
+      volumes:
+        - name: log-volume
+          emptyDir: {}
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: httpbin
+  labels:
+    app: httpbin
+spec:
+  ports:
+    - name: http
+      port: 80
+      targetPort: 8080
+  type: LoadBalancer
+  selector:
+    app: httpbin
+---
+apiVersion: autoscaling/v2beta2
+kind: HorizontalPodAutoscaler
+metadata:
+  name: httpbin
+spec:
+  scaleTargetRef:
+    apiVersion: apps/v1
+    kind: Deployment
+    name: httpbin
+  minReplicas: 1
+  maxReplicas: 10
+  metrics:
+    - type: Resource
+      resource:
+        name: cpu
+        target:
+          type: Utilization
+          averageUtilization: 60
+    - type: Resource
+      resource:
+        name: memory
+        target:
+          type: Utilization
+          averageUtilization: 80
