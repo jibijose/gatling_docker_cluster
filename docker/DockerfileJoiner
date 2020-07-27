@@ -1,6 +1,7 @@
 FROM openjdk:8u242-jdk-slim AS builder
 
 ARG MVN_VERSION=3.6.3
+ENV NUM_OF_NODES=10
 
 RUN apt-get update -qq && \
     apt-get install wget -y -qq > /dev/null && \
@@ -12,4 +13,4 @@ RUN apt-get update -qq && \
 
 COPY gatlingJoiner.sh /usr/local/bin/
 
-ENTRYPOINT /usr/local/bin/gatlingJoiner.sh
+ENTRYPOINT /usr/local/bin/gatlingJoiner.sh "${NUM_OF_NODES}"

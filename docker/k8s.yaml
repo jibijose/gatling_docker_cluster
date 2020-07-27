@@ -99,6 +99,9 @@ spec:
           volumeMounts:
             - name: pvc-data
               mountPath: /pvc-data
+          env:
+            - name: NUM_OF_NODES
+              value: "${NUM_OF_NODES}"
       volumes:
         - name: pvc-data
           persistentVolumeClaim:
