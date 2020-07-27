@@ -17,4 +17,6 @@ reports/*
 
 **/*_temp.properties
 **/*_temp.yaml
+**/reports/*
+**/reports-*.tar
 

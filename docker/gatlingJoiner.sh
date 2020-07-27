@@ -1,7 +1,11 @@
 #!/bin/bash
 
+GATLING_HOME=/gatling_run_dir/gatling-charts-highcharts-bundle-3.3.1
+GATLING_SIMULATIONS_DIR=${GATLING_HOME}/user-files/simulations
+GATLING_RESULTS_DIR=${GATLING_HOME}/results
 PVC_DATA=/pvc-data
 HOSTNAME=`hostname`
+
 NUM_OF_NODES=$1
 
 while true
@@ -17,15 +21,15 @@ do
 	sleep 10
 done
 
-mkdir /gatling_run_dir/gatling-charts-highcharts-bundle-3.3.1/results/reports
+mkdir ${GATLING_RESULTS_DIR}/reports
 echo "Copying simulation-*.log"
-cp /pvc-data/simulation-*.* /gatling_run_dir/gatling-charts-highcharts-bundle-3.3.1/results/reports/
+cp ${PVC_DATA}/simulation-*.* ${GATLING_RESULTS_DIR}/reports/
 echo "Generating combined gatling report"
-/gatling_run_dir/gatling-charts-highcharts-bundle-3.3.1/bin/gatling.sh -ro reports
+${GATLING_HOME}/bin/gatling.sh -ro reports
 
-rm -rf /gatling_run_dir/gatling-charts-highcharts-bundle-3.3.1/results/reports/simulation-*.*
+rm -rf ${GATLING_RESULTS_DIR}/reports/simulation-*.*
 echo "Zipping reports"
-tar -C /gatling_run_dir/gatling-charts-highcharts-bundle-3.3.1/results/ -cvf /gatling_run_dir/reports.tar reports/
+tar -C ${GATLING_RESULTS_DIR}/ -cvf /gatling_run_dir/reports.tar reports/
 
 while true
 do

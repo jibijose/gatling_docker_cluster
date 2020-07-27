@@ -51,7 +51,11 @@ kubectl apply -f ${K8S_DEPLOY_FILE_TEMP} -n ${K8S_NAMESPACE}
 #kubectl exec -it `kubectl get pods -n ${K8S_NAMESPACE} | grep "gatlingjoiner" | grep "Running" | grep "1/1" | tail -n 1 | awk '{print $1;}'` -n ${K8S_NAMESPACE} /bin/bash
 #kubectl logs `kubectl get pods -n ${K8S_NAMESPACE} | grep "gatlingjoiner" | grep "Running" | grep "1/1" | tail -n 1 | awk '{print $1;}'` -n ${K8S_NAMESPACE}
 
-#kubectl cp gatlingcluster/<some-pod>:/gatling_run_dir/gatling-charts-highcharts-bundle-3.3.1/results/reports/ /tmp
+DATENOW=`date "+%Y%m%d%H%M%S"`
+kubectl cp gatlingcluster/`kubectl get pods -n ${K8S_NAMESPACE} | grep "gatlingjoiner" | grep "Running" | grep "1/1" | tail -n 1 | awk '{print $1;}'`:/gatling_run_dir/reports.tar ./reports-${DATENOW}.tar
+rm -rf reports
+tar -xvf reports-${DATENOW}.tar
+open reports/index.html
 
 #docker stop $(docker ps -aq)
 #docker rm $(docker ps -aq)
