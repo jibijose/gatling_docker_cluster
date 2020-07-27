@@ -1,23 +1,51 @@
+### https://docs.microsoft.com/en-us/azure/aks/azure-files-dynamic-pv
+kind: StorageClass
+apiVersion: storage.k8s.io/v1
+metadata:
+    name: my-azurefile
+provisioner: kubernetes.io/azure-file
+mountOptions:
+    - dir_mode=0777
+    - file_mode=0777
+    - uid=0
+    - gid=0
+    - mfsymlinks
+    - cache=strict
+parameters:
+    skuName: Standard_LRS
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+    name: my-azurefile
+spec:
+    accessModes:
+    - ReadWriteMany
+    storageClassName: azurefile
+    resources:
+        requests:
+          storage: 5Gi
+---
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: gatlingcluster
+  name: gatlingnode
 spec:
   selector:
     matchLabels:
-        app: gatlingcluster
+        app: gatlingnode
         version: v1
-  replicas: 1
+  replicas: ${NUM_OF_NODES}
   template:
     metadata:
       labels:
-        app: gatlingcluster
+        app: gatlingnode
         version: v1
     spec:
       containers:
-        - image: registry.hub.docker.com/jibijose/gatlingcluster:latest
+        - image: registry.hub.docker.com/jibijose/gatlingnode:latest
           imagePullPolicy: Always
-          name: gatlingcluster
+          name: gatlingnode
           resources:
             requests:
               memory: 2Gi
@@ -26,12 +54,53 @@ spec:
               memory: 2Gi
               cpu: 1000m
           volumeMounts:
-            - name: config
+            - name: copied-run-files
               mountPath: /gatling_run_dir/gatling-charts-highcharts-bundle-3.3.1/copied-run-files
+            - name: pvc-data
+              mountPath: /pvc-data
       volumes:
-        - name: config
+        - name: copied-run-files
           configMap:
-            name: cm.gatling
+            name: loadprofile.scala
             items:
             - key: "loadprofile.scala"
               path: "loadprofile.scala"
+        - name: pvc-data
+          persistentVolumeClaim:
+            claimName: my-azurefile
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: gatlingjoiner
+spec:
+  selector:
+    matchLabels:
+        app: gatlingjoiner
+        version: v1
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: gatlingjoiner
+        version: v1
+    spec:
+      containers:
+        - image: registry.hub.docker.com/jibijose/gatlingjoiner:latest
+          imagePullPolicy: Always
+          name: gatlingjoiner
+          resources:
+            requests:
+                memory: 2Gi
+                cpu: 1000m
+            limits:
+                memory: 2Gi
+                cpu: 1000m
+          volumeMounts:
+            - name: pvc-data
+              mountPath: /pvc-data
+      volumes:
+        - name: pvc-data
+          persistentVolumeClaim:
+            claimName: my-azurefile
+            

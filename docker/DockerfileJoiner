@@ -1,0 +1,15 @@
+FROM openjdk:8u242-jdk-slim AS builder
+
+ARG MVN_VERSION=3.6.3
+
+RUN apt-get update -qq && \
+    apt-get install wget -y -qq > /dev/null && \
+    apt-get install unzip -y -qq > /dev/null && \
+    mkdir gatling_run_dir && \
+    mkdir -p gatling_run_dir/gatling-charts-highcharts-bundle-3.3.1/copied-run-files && \
+    wget -q -P gatling_run_dir https://repo1.maven.org/maven2/io/gatling/highcharts/gatling-charts-highcharts-bundle/3.3.1/gatling-charts-highcharts-bundle-3.3.1-bundle.zip && \
+    unzip -q gatling_run_dir/gatling-charts-highcharts-bundle-3.3.1-bundle.zip -d gatling_run_dir
+
+COPY gatlingJoiner.sh /usr/local/bin/
+
+ENTRYPOINT /usr/local/bin/gatlingJoiner.sh

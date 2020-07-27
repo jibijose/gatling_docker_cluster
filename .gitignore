@@ -15,3 +15,5 @@ reports/*
 **/AzureCosBlue/AzureCosBlue*.*
 **/FalconApiGee/FalconApiGee*.*
 
+**/*.properties_temp
+
