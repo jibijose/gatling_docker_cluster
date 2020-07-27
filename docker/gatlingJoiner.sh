@@ -17,6 +17,11 @@ do
 	sleep 10
 done
 
+mkdir /gatling_run_dir/gatling-charts-highcharts-bundle-3.3.1/results/reports
+cp /pvc-data/simulation-*.* /gatling_run_dir/gatling-charts-highcharts-bundle-3.3.1/results/reports/
+/gatling_run_dir/gatling-charts-highcharts-bundle-3.3.1/bin/gatling.sh -ro reports
+rm -rf /gatling_run_dir/gatling-charts-highcharts-bundle-3.3.1/results/reports/simulation-*.*
+tar -C /gatling_run_dir/gatling-charts-highcharts-bundle-3.3.1/results/ -cvf /gatling_run_dir/reports.tar reports/
 
 while true
 do
