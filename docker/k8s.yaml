@@ -24,7 +24,7 @@ spec:
     storageClassName: azurefile
     resources:
         requests:
-          storage: 5Gi
+          storage: ${PVC_SIZE}
 ---
 apiVersion: apps/v1
 kind: Deployment
@@ -48,11 +48,11 @@ spec:
           name: gatlingnode
           resources:
             requests:
-              memory: 2Gi
-              cpu: 1000m
+              memory: ${NODE_CPU_REQUEST}
+              cpu: ${NODE_MEMORY_REQUEST}
             limits:
-              memory: 2Gi
-              cpu: 1000m
+              memory: ${NODE_CPU_LIMIT}
+              cpu: ${NODE_MEMORY_LIMIT}
           volumeMounts:
             - name: copied-run-files
               mountPath: /gatling_run_dir/gatling-charts-highcharts-bundle-3.3.1/copied-run-files

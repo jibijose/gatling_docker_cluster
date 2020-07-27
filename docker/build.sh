@@ -37,8 +37,14 @@ kubectl delete -f ${K8S_DEPLOY_FILE} -n ${K8S_NAMESPACE}
 sed 's/^/export /' ${K8SPROPERTIES} > ${K8SPROPERTIES}_temp
 . ${K8SPROPERTIES}_temp
 rm -rf ${K8SPROPERTIES}_temp
-sed -i "s/\${NUM_OF_NODES}/$NUM_OF_NODES/g" ${K8S_DEPLOY_FILE}
-kubectl apply -f ${K8S_DEPLOY_FILE} -n ${K8S_NAMESPACE}
+cp ${K8S_DEPLOY_FILE} ${K8S_DEPLOY_FILE}_temp
+sed -i "" "s/\${NUM_OF_NODES}/$NUM_OF_NODES/g" ${K8S_DEPLOY_FILE}_temp
+sed -i "" "s/\${PVC_SIZE}/$PVC_SIZE/g" ${K8S_DEPLOY_FILE}_temp
+sed -i "" "s/\${NODE_CPU_REQUEST}/$NODE_CPU_REQUEST/g" ${K8S_DEPLOY_FILE}_temp
+sed -i "" "s/\${NODE_MEMORY_REQUEST}/$NODE_MEMORY_REQUEST/g" ${K8S_DEPLOY_FILE}_temp
+sed -i "" "s/\${NODE_CPU_LIMIT}/$NODE_CPU_LIMIT/g" ${K8S_DEPLOY_FILE}_temp
+sed -i "" "s/\${NODE_MEMORY_LIMIT}/$NODE_MEMORY_LIMIT/g" ${K8S_DEPLOY_FILE}_temp
+kubectl apply -f ${K8S_DEPLOY_FILE}_temp -n ${K8S_NAMESPACE}
 #kubectl get pods -n ${K8S_NAMESPACE}
 #kubectl describe pod `kubectl get pods -n ${K8S_NAMESPACE} | grep "gatlingjoiner" | grep "Running" | grep "1/1" | tail -n 1 | awk '{print $1;}'` -n ${K8S_NAMESPACE}
 #kubectl exec -it `kubectl get pods -n ${K8S_NAMESPACE} | grep "gatlingjoiner" | grep "Running" | grep "1/1" | tail -n 1 | awk '{print $1;}'` -n ${K8S_NAMESPACE} /bin/bash

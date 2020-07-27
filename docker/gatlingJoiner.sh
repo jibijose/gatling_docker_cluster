@@ -10,5 +10,6 @@ do
     then
 
 	fi
+	echo `date`"   Waiting..."
 	sleep 10
 done

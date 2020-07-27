@@ -11,5 +11,6 @@ cp /gatling_run_dir/gatling-charts-highcharts-bundle-3.3.1/results/loadprofile-*
 
 while true
 do
+	echo `date`"   Waiting..."
 	sleep 10
 done

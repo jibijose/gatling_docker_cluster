@@ -16,4 +16,5 @@ reports/*
 **/FalconApiGee/FalconApiGee*.*
 
 **/*.properties_temp
+**/*yaml_temp
 
