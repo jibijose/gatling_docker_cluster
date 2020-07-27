@@ -18,9 +18,13 @@ do
 done
 
 mkdir /gatling_run_dir/gatling-charts-highcharts-bundle-3.3.1/results/reports
+echo "Copying simulation-*.log"
 cp /pvc-data/simulation-*.* /gatling_run_dir/gatling-charts-highcharts-bundle-3.3.1/results/reports/
+echo "Generating combined gatling report"
 /gatling_run_dir/gatling-charts-highcharts-bundle-3.3.1/bin/gatling.sh -ro reports
+
 rm -rf /gatling_run_dir/gatling-charts-highcharts-bundle-3.3.1/results/reports/simulation-*.*
+echo "Zipping reports"
 tar -C /gatling_run_dir/gatling-charts-highcharts-bundle-3.3.1/results/ -cvf /gatling_run_dir/reports.tar reports/
 
 while true
