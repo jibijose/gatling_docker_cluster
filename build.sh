@@ -44,18 +44,24 @@ kubectl create configmap ${CONFIGMAP_K8S_PROPS_NAME} --from-file=${K8SPROPERTIES
 #kubectl get configmap -n ${K8S_NAMESPACE}
 
 #################### deploy k8s ############################
+
+function replaceK8sProperties() {
+    while read keyvalue; 
+    do 
+        key=`echo $keyvalue | cut -d'=' -f1`
+        value=`echo $keyvalue | cut -d'=' -f2`
+        #echo "KEY = $key   VALUE=$value"
+        sed -i "" "s/\${$key}/$value/g" ${K8S_DEPLOY_FILE_TEMP}
+    done < ${K8SPROPERTIES}
+}
+
 echo "Make sure you are connected to kubectl"
 sed 's/^/export /' ${K8SPROPERTIES} > ${K8SPROPERTIESTEMP}
 . ${K8SPROPERTIESTEMP}
 rm -rf ${K8SPROPERTIESTEMP}
 
 cp ${K8S_DEPLOY_FILE} ${K8S_DEPLOY_FILE_TEMP}
-sed -i "" "s/\${NUM_OF_NODES}/$NUM_OF_NODES/g" ${K8S_DEPLOY_FILE_TEMP}
-sed -i "" "s/\${PVC_SIZE}/$PVC_SIZE/g" ${K8S_DEPLOY_FILE_TEMP}
-sed -i "" "s/\${NODE_CPU_REQUEST}/$NODE_CPU_REQUEST/g" ${K8S_DEPLOY_FILE_TEMP}
-sed -i "" "s/\${NODE_MEMORY_REQUEST}/$NODE_MEMORY_REQUEST/g" ${K8S_DEPLOY_FILE_TEMP}
-sed -i "" "s/\${NODE_CPU_LIMIT}/$NODE_CPU_LIMIT/g" ${K8S_DEPLOY_FILE_TEMP}
-sed -i "" "s/\${NODE_MEMORY_LIMIT}/$NODE_MEMORY_LIMIT/g" ${K8S_DEPLOY_FILE_TEMP}
+replaceK8sProperties
 kubectl delete -f ${K8S_DEPLOY_FILE_TEMP} -n ${K8S_NAMESPACE}
 kubectl apply -f ${K8S_DEPLOY_FILE_TEMP} -n ${K8S_NAMESPACE}
 rm -rf ${K8S_DEPLOY_FILE_TEMP}
@@ -64,9 +70,25 @@ rm -rf ${K8S_DEPLOY_FILE_TEMP}
 #kubectl get pods -n ${K8S_NAMESPACE}
 #kubectl describe pod `kubectl get pods -n ${K8S_NAMESPACE} | grep "gatlingjoiner" | grep "Running" | grep "1/1" | tail -n 1 | awk '{print $1;}'` -n ${K8S_NAMESPACE}
 #kubectl exec -it `kubectl get pods -n ${K8S_NAMESPACE} | grep "gatlingjoiner" | grep "Running" | grep "1/1" | tail -n 1 | awk '{print $1;}'` -n ${K8S_NAMESPACE} /bin/bash
-#kubectl logs `kubectl get pods -n ${K8S_NAMESPACE} | grep "gatlingjoiner" | grep "Running" | grep "1/1" | tail -n 1 | awk '{print $1;}'` -n ${K8S_NAMESPACE}
+#kubectl logs --follow `kubectl get pods -n ${K8S_NAMESPACE} | grep "gatlingjoiner" | grep "Running" | grep "1/1" | tail -n 1 | awk '{print $1;}'` -n ${K8S_NAMESPACE}
 
 #################### copy combined gatling report ############################
+function waitForReports() {
+    GATLING_JOINER_POD=`kubectl get pods -n ${K8S_NAMESPACE} | grep "gatlingjoiner" | grep "Running" | grep "1/1" | tail -n 1 | awk '{print $1;}'`
+    while true
+    do
+        successmsgcount=`kubectl logs $GATLING_JOINER_POD -n ${K8S_NAMESPACE} | grep "Waiting after completion" | wc -l`
+        if [ $successmsgcount -gt 0 ]
+	    then
+            echo "Report generated. Continuing..."
+            break
+        fi
+        echo `date`"   Waiting for report generation..."
+        sleep 10
+    done
+}
+
+waitForReports
 DATENOW=`date "+%Y%m%d%H%M%S"`
 kubectl cp gatlingcluster/`kubectl get pods -n ${K8S_NAMESPACE} | grep "gatlingjoiner" | grep "Running" | grep "1/1" | tail -n 1 | awk '{print $1;}'`:/gatling_run_dir/reports.tar ./reports-${DATENOW}.tar
 rm -rf reports
