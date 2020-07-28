@@ -48,14 +48,14 @@ spec:
           name: gatlingnode
           resources:
             requests:
-              memory: ${NODE_CPU_REQUEST}
-              cpu: ${NODE_MEMORY_REQUEST}
+              memory: ${NODE_MEMORY_REQUEST}
+              cpu: ${NODE_CPU_REQUEST}
             limits:
-              memory: ${NODE_CPU_LIMIT}
-              cpu: ${NODE_MEMORY_LIMIT}
+              memory: ${NODE_MEMORY_LIMIT}
+              cpu: ${NODE_CPU_LIMIT}
           volumeMounts:
             - name: copied-run-files
-              mountPath: ${DOCKER_GATLING_COPIED_DIR}
+              mountPath: ${GATLING_COPIED_DIR}
             - name: pvc-data
               mountPath: /pvc-data
       volumes:
@@ -91,11 +91,11 @@ spec:
           name: gatlingjoiner
           resources:
             requests:
-                memory: ${JOINER_CPU_REQUEST}
-                cpu: ${JOINER_MEMORY_REQUEST}
+                memory: ${JOINER_MEMORY_REQUEST}
+                cpu: ${JOINER_CPU_REQUEST}
             limits:
-                memory: ${JOINER_CPU_LIMIT}
-                cpu: ${JOINER_MEMORY_LIMIT}
+                memory: ${JOINER_MEMORY_LIMIT}
+                cpu: ${JOINER_CPU_LIMIT}
           volumeMounts:
             - name: pvc-data
               mountPath: /pvc-data

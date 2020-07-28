@@ -1,10 +1,6 @@
 #!/bin/bash
 
-GATLING_HOME=/gatling_run_dir/gatling-charts-highcharts-bundle-3.3.1
-GATLING_SIMULATIONS_DIR=${GATLING_HOME}/user-files/simulations
-GATLING_RESULTS_DIR=${GATLING_HOME}/results
-PVC_DATA=/pvc-data
-HOSTNAME=`hostname`
+. /usr/local/bin/k8sProperties.sh
 
 cp ${GATLING_HOME}/copied-run-files/loadprofile.scala ${GATLING_SIMULATIONS_DIR}/
 sed -i "s/_namesuffix/_$HOSTNAME/g" ${GATLING_SIMULATIONS_DIR}/loadprofile.scala
