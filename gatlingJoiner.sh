@@ -20,6 +20,15 @@ done
 mkdir ${GATLING_RESULTS_DIR}/reports
 echo "Copying simulation-*.log"
 cp ${PVC_DATA}/simulation-*.* ${GATLING_RESULTS_DIR}/reports/
+
+sed -i "s/_namesuffix/_$HOSTNAME/g" ${GATLING_SIMULATIONS_DIR}/loadprofile.scala
+sed -i "s/-Xmx1G/-Xms$GATLING_JOINER_MAX_MEMORY -Xmx$GATLING_JOINER_MAX_MEMORY/g" $GATLING_RUNNER
+sed -i "s/#lowerBound = 800/lowerBound = $GATLING_REQ_LOWER_BOUND/g" $GATLING_CONF
+sed -i "s/#higherBound = 1200/higherBound = $GATLING_REQ_HIGHER_BOUND/g" $GATLING_CONF
+sed -i "s/#enableGA = true/enableGA = $GATLING_ENABLE_GA/g" $GATLING_CONF
+sed -i "s/#maxRetry = 2/maxRetry = $GATLING_MAX_RETRY/g" $GATLING_CONF
+sed -i "s/#requestTimeout = 60000/requestTimeout = $GATLING_REQ_TIMEOUT/g" $GATLING_CONF
+
 echo "Generating combined gatling report"
 ${GATLING_HOME}/bin/gatling.sh -ro reports
 

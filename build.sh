@@ -37,13 +37,11 @@ kubectl create namespace ${K8S_NAMESPACE}
 
 echo
 echo "#### Creation of configmap  ${CONFIGMAP_LOADPROFILE_NAME} ###"
-kubectl delete configmap ${CONFIGMAP_LOADPROFILE_NAME} -n ${K8S_NAMESPACE}
 kubectl create configmap ${CONFIGMAP_LOADPROFILE_NAME} --from-file=${LOADPROFILE} -n ${K8S_NAMESPACE}
 #kubectl get configmap -n ${K8S_NAMESPACE}
 
 echo
 echo "#### Creation of configmap  ${CONFIGMAP_K8S_PROPS_NAME} ###"
-kubectl delete configmap ${CONFIGMAP_K8S_PROPS_NAME} -n ${K8S_NAMESPACE}
 kubectl create configmap ${CONFIGMAP_K8S_PROPS_NAME} --from-file=${K8SPROPERTIES} -n ${K8S_NAMESPACE}
 #kubectl get configmap -n ${K8S_NAMESPACE}
 
@@ -64,7 +62,6 @@ function replaceK8sPropertiesInYaml() {
 cp ${K8S_DEPLOY_FILE} ${K8S_DEPLOY_FILE_TEMP}
 replaceK8sPropertiesInYaml
 echo "#### Applying kubernetes yaml into namespace ${K8S_NAMESPACE} ###"
-kubectl delete -f ${K8S_DEPLOY_FILE_TEMP} -n ${K8S_NAMESPACE}
 kubectl apply -f ${K8S_DEPLOY_FILE_TEMP} -n ${K8S_NAMESPACE}
 rm -rf ${K8S_DEPLOY_FILE_TEMP}
 
