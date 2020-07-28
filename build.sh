@@ -2,22 +2,33 @@
 
 . k8sProperties.sh
 
-echo "######################################## build and push docker images ################################################"
-echo "Make sure you are logged into docker host"
-#docker login ${DOCKER_HOST}
+if [ "$#" -ne 1 ]
+then
+    echo "Usage: $0 build_docker_flag"
+    exit 1
+fi
 
-echo
-echo "#### build and push of gatlingnode image ###"
-docker build . -t ${DOCKERHUB_NODE_IMAGE} -f DockerfileNode -q
-docker push ${DOCKERHUB_NODE_IMAGE}
+buildDockerFlag=$1
 
-echo
-echo "#### build and push of gatlingjoiner image ###"
-docker build . -t ${DOCKERHUB_JOINER_IMAGE} -f DockerfileJoiner  -q
-docker push ${DOCKERHUB_JOINER_IMAGE}
+if [ $buildDockerFlag == true ]
+then
+    echo "######################################## build and push docker images ################################################"
+    echo "Make sure you are logged into docker host"
+    #docker login ${DOCKER_HOST}
 
-#docker run -it --mount type=bind,source=${PWD}/${LOADPROFILE},target=${GATLING_COPIED_DIR}/${LOADPROFILE} ${DOCKERHUB_NODE_IMAGE} /bin/bash
-#docker run -it --env NUM_OF_NODES=3 ${DOCKERHUB_JOINER_IMAGE}  /bin/bash
+    echo
+    echo "#### build and push of gatlingnode image ###"
+    docker build . -t ${DOCKERHUB_NODE_IMAGE} -f DockerfileNode -q
+    docker push ${DOCKERHUB_NODE_IMAGE}
+
+    echo
+    echo "#### build and push of gatlingjoiner image ###"
+    docker build . -t ${DOCKERHUB_JOINER_IMAGE} -f DockerfileJoiner  -q
+    docker push ${DOCKERHUB_JOINER_IMAGE}
+
+    #docker run -it --mount type=bind,source=${PWD}/${LOADPROFILE},target=${GATLING_COPIED_DIR}/${LOADPROFILE} ${DOCKERHUB_NODE_IMAGE} /bin/bash
+    #docker run -it --env NUM_OF_NODES=3 ${DOCKERHUB_JOINER_IMAGE}  /bin/bash
+fi
 
 echo "######################################## deploy k8s configmaps #######################################################"
 echo "Make sure you are connected to kubectl"
