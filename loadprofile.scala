@@ -17,12 +17,12 @@ class loadprofile extends Simulation {
 
   setUp(
     scn100milli.inject(
-       constantUsersPerSec(10) during (1 minute),
-       rampUsersPerSec(1) to 10 during(10 seconds),
-       constantUsersPerSec(10) during(1 minutes)
+       constantUsersPerSec(1) during (10 seconds),
+       rampUsersPerSec(1) to 10 during(20 seconds),
+       constantUsersPerSec(10) during(30 seconds)
      )
      .protocols(httpProtocol)
   )
-  .maxDuration(2 minutes);
+  .maxDuration(1 minutes);
 
 }

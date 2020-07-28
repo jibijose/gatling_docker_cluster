@@ -105,7 +105,7 @@ DATENOW=`date "+%Y%m%d%H%M%S"`
 
 echo
 echo "#### Copying reports to local ###"
-kubectl cp gatlingcluster/`kubectl get pods -n ${K8S_NAMESPACE} | grep "gatlingjoiner" | grep "Running" | grep "1/1" | tail -n 1 | awk '{print $1;}'`:/gatling_run_dir/reports.tar ./reports-${DATENOW}.tar
+kubectl cp ${K8S_NAMESPACE}/`kubectl get pods -n ${K8S_NAMESPACE} | grep "gatlingjoiner" | grep "Running" | grep "1/1" | tail -n 1 | awk '{print $1;}'`:/gatling_run_dir/reports.tar ./reports-${DATENOW}.tar
 rm -rf reports
 tar -xf reports-${DATENOW}.tar
 
