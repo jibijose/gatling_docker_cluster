@@ -61,10 +61,10 @@ spec:
       volumes:
         - name: copied-run-files
           configMap:
-            name: ${LOADPROFILE}
+            name: ${LOAD_PROFILE_SCALA}
             items:
-            - key: "${LOADPROFILE}"
-              path: "${LOADPROFILE}"
+            - key: "${LOAD_PROFILE_SCALA}"
+              path: "${LOAD_PROFILE_SCALA}"
         - name: pvc-data
           persistentVolumeClaim:
             claimName: my-azurefile

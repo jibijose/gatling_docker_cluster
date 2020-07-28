@@ -26,7 +26,7 @@ then
     docker build . -t ${DOCKERHUB_JOINER_IMAGE} -f DockerfileJoiner  -q
     docker push ${DOCKERHUB_JOINER_IMAGE}
 
-    #docker run -it --mount type=bind,source=${PWD}/${LOADPROFILE},target=${GATLING_COPIED_DIR}/${LOADPROFILE} ${DOCKERHUB_NODE_IMAGE} /bin/bash
+    #docker run -it --mount type=bind,source=${PWD}/${LOAD_PROFILE_SCALA},target=${GATLING_COPIED_DIR}/${LOAD_PROFILE_SCALA} ${DOCKERHUB_NODE_IMAGE} /bin/bash
     #docker run -it --env NUM_OF_NODES=3 ${DOCKERHUB_JOINER_IMAGE}  /bin/bash
 fi
 
@@ -37,7 +37,7 @@ kubectl create namespace ${K8S_NAMESPACE}
 
 echo
 echo "#### Creation of configmap  ${CONFIGMAP_LOADPROFILE_NAME} ###"
-kubectl create configmap ${CONFIGMAP_LOADPROFILE_NAME} --from-file=${LOADPROFILE} -n ${K8S_NAMESPACE}
+kubectl create configmap ${CONFIGMAP_LOADPROFILE_NAME} --from-file=${LOAD_PROFILE_SCALA} -n ${K8S_NAMESPACE}
 #kubectl get configmap -n ${K8S_NAMESPACE}
 
 echo

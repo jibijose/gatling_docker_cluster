@@ -1,11 +1,12 @@
-LOAD_PROFILE_NAME=loadprofile
 #################### editable variables ############################
+LOAD_PROFILE_NAME=loadprofile
 K8S_NAMESPACE=gatlingcluster
-DOCKER_HOST=registry.hub.docker.com
-DOCKER_USER=jibijose
+
 
 #################### other variables ############################
-LOADPROFILE=${LOAD_PROFILE_NAME}.scala
+DOCKER_HOST=registry.hub.docker.com
+DOCKER_USER=jibijose
+LOAD_PROFILE_SCALA=${LOAD_PROFILE_NAME}.scala
 K8SPROPERTIES=k8sProperties.sh
 K8S_DEPLOY_FILE=k8s.yaml
 CONFIGMAP_LOADPROFILE_NAME=${LOAD_PROFILE_NAME}.scala
