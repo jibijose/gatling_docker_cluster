@@ -10,11 +10,11 @@ do
 	if [ $numofnodes == $NUM_OF_NODES ]
 	then
 		echo `date`"   Jobs completed in nodes $numofnodes"
-		sleep 10
+		sleep ${RUN_TIME_INTERVAL}
 		break
 	fi
 	echo `date`"   Waiting... number of nodes completed $numofnodes out of expected $NUM_OF_NODES"
-	sleep 10
+	sleep ${RUN_TIME_INTERVAL}
 done
 
 mkdir ${GATLING_RESULTS_DIR}/reports
@@ -39,5 +39,5 @@ tar -C ${GATLING_RESULTS_DIR}/ -cf /gatling_run_dir/reports.tar reports/
 while true
 do
 	echo `date`"   Waiting after completion..."
-	sleep 10
+	sleep ${RUN_TIME_INTERVAL}
 done

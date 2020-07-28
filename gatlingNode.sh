@@ -19,7 +19,7 @@ cp ${GATLING_HOME}/results/${LOAD_PROFILE_NAME}-*/simulation.log ${PVC_DATA}/sim
 while true
 do
 	echo `date`"   Waiting..."
-	sleep 10
+	sleep ${RUN_TIME_INTERVAL}
 done
 
 

@@ -20,6 +20,9 @@ GATLING_REQ_HIGHER_BOUND=250
 GATLING_ENABLE_GA=false
 GATLING_MAX_RETRY=3
 GATLING_REQ_TIMEOUT=500
+
+BUILD_TIME_INTERVAL=10
+RUN_TIME_INTERVAL=10
 #################### other variables ############################
 DOCKER_HOST=registry.hub.docker.com
 DOCKER_USER=jibijose
