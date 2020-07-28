@@ -10,8 +10,8 @@ class loadprofile extends Simulation {
 
   val scn100milli = scenario("Scenario delay 1 second delay") // A scenario is a chain of requests and pauses
     .exec(
-      http("request_1_second_delay_namesuffix")
-        .get("/delay/0.5")
+      http("request_delay_namesuffix")
+        .get("/delay/1")
       .check(status.is(200))
     );
 
