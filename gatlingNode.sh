@@ -1,6 +1,12 @@
 #!/bin/bash
 
-. /gatling_run_dir/gatling-charts-highcharts-bundle-3.3.1/copied-run-files/k8sProperties.sh
+if [ "$#" -ne 1 ]
+then
+    echo "Usage: $0 load_profile"
+    exit 1
+fi
+
+. /gatling_run_dir/gatling-charts-highcharts-bundle-3.3.1/copied-run-files/k8sProperties.sh $1
 
 cp ${GATLING_HOME}/copied-run-files/${LOAD_PROFILE_SCALA} ${GATLING_SIMULATIONS_DIR}/
 cp ${GATLING_HOME}/copied-run-files/${LOAD_PROFILE_JSON} ${GATLING_RESOURCES_DIR}/

@@ -1,8 +1,13 @@
 #!/bin/bash
 
-. /gatling_run_dir/gatling-charts-highcharts-bundle-3.3.1/copied-run-files/k8sProperties.sh
+if [ "$#" -ne 2 ]
+then
+    echo "Usage: $0 load_profile num_of_nodes"
+    exit 1
+fi
 
-NUM_OF_NODES=$1
+. /gatling_run_dir/gatling-charts-highcharts-bundle-3.3.1/copied-run-files/k8sProperties.sh $1
+NUM_OF_NODES=$2
 
 while true
 do

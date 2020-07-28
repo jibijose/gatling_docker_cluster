@@ -58,6 +58,9 @@ spec:
               mountPath: ${GATLING_COPIED_DIR}
             - name: pvc-data
               mountPath: /pvc-data
+          env:
+            - name: LOAD_PROFILE_NAME
+              value: "${LOAD_PROFILE_NAME}"
       volumes:
         - name: copied-run-files
           configMap:
@@ -106,6 +109,8 @@ spec:
             - name: pvc-data
               mountPath: /pvc-data
           env:
+            - name: LOAD_PROFILE_NAME
+              value: "${LOAD_PROFILE_NAME}"
             - name: NUM_OF_NODES
               value: "${NUM_OF_NODES}"
       volumes:

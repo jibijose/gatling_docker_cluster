@@ -1,6 +1,6 @@
 FROM openjdk:8u242-jdk-slim AS builder
 
-ARG MVN_VERSION=3.6.3
+ENV LOAD_PROFILE_NAME=loadprofile
 
 RUN apt-get update -qq && \
     apt-get install wget -y -qq > /dev/null && \
@@ -11,6 +11,5 @@ RUN apt-get update -qq && \
     unzip -q gatling_run_dir/gatling-charts-highcharts-bundle-3.3.1-bundle.zip -d gatling_run_dir
 
 COPY gatlingNode.sh /usr/local/bin/
-COPY k8sProperties.sh /usr/local/bin/
 
-ENTRYPOINT /usr/local/bin/gatlingNode.sh
+ENTRYPOINT /usr/local/bin/gatlingNode.sh "${LOAD_PROFILE_NAME}"

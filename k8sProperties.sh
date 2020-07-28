@@ -1,6 +1,14 @@
+#!/bin/bash
+
+if [ "$#" -ne 1 ]
+then
+    echo "Usage: $0 load_profile"
+    exit 1
+fi
+
 #################### editable variables ############################
-LOAD_PROFILE_NAME=loadprofile
-K8S_NAMESPACE=gatlingcluster
+LOAD_PROFILE_NAME=$1
+K8S_NAMESPACE=gatlingcluster-${LOAD_PROFILE_NAME}
 
 PVC_SIZE=5Gi
 

@@ -1,14 +1,15 @@
 #!/bin/bash
 
-. k8sProperties.sh
-
-if [ "$#" -ne 1 ]
+if [ "$#" -ne 2 ]
 then
-    echo "Usage: $0 build_docker_flag"
+    echo "Usage: $0 build_docker_flag load_profile"
     exit 1
 fi
 
 buildDockerFlag=$1
+load_profile=$2
+
+. k8sProperties.sh $load_profile
 
 if [ $buildDockerFlag == true ]
 then
@@ -65,6 +66,8 @@ echo `date`"   ######################################## kubectl stats/logs #####
 #kubectl get pods -n ${K8S_NAMESPACE}
 #kubectl describe pod `kubectl get pods -n ${K8S_NAMESPACE} | grep "gatlingjoiner" | grep "Running" | grep "1/1" | tail -n 1 | awk '{print $1;}'` -n ${K8S_NAMESPACE}
 #kubectl exec -it `kubectl get pods -n ${K8S_NAMESPACE} | grep "gatlingjoiner" | grep "Running" | grep "1/1" | tail -n 1 | awk '{print $1;}'` -n ${K8S_NAMESPACE} /bin/bash
+
+#kubectl exec -it `kubectl get pods -n ${K8S_NAMESPACE} | grep "gatlingnode" | grep "Running" | grep "1/1" | tail -n 1 | awk '{print $1;}'` -n ${K8S_NAMESPACE} -- bash -c "tail -f /run.log"
 #kubectl logs --follow `kubectl get pods -n ${K8S_NAMESPACE} | grep "gatlingjoiner" | grep "Running" | grep "1/1" | tail -n 1 | awk '{print $1;}'` -n ${K8S_NAMESPACE}
 
 echo `date`"   ######################################## copy combined gatling report ################################################"
