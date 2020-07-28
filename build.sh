@@ -21,7 +21,8 @@ docker push ${DOCKERHUB_JOINER_IMAGE}
 
 echo "######################################## deploy k8s configmaps #######################################################"
 echo "Make sure you are connected to kubectl"
-#kubectl create namespace  ${K8S_NAMESPACE}
+kubectl delete namespace ${K8S_NAMESPACE}
+kubectl create namespace ${K8S_NAMESPACE}
 
 echo
 echo "#### Creation of configmap  ${CONFIGMAP_LOADPROFILE_NAME} ###"
@@ -98,12 +99,21 @@ echo
 echo "#### Copying reports to local ###"
 kubectl cp gatlingcluster/`kubectl get pods -n ${K8S_NAMESPACE} | grep "gatlingjoiner" | grep "Running" | grep "1/1" | tail -n 1 | awk '{print $1;}'`:/gatling_run_dir/reports.tar ./reports-${DATENOW}.tar
 rm -rf reports
-tar -xvf reports-${DATENOW}.tar
+tar -xf reports-${DATENOW}.tar
 
 echo
 echo "#### Opening reports ###"
 open reports/index.html
 
-echo "######################################## docker cleanup ##############################################################"
+echo "######################################## cleanup #####################################################################"
+echo
+echo "#### Kubectl cleanup ###"
+#kubectl delete -f ${K8S_DEPLOY_FILE_TEMP} -n ${K8S_NAMESPACE}
+#kubectl delete configmap ${CONFIGMAP_K8S_PROPS_NAME} -n ${K8S_NAMESPACE}
+#kubectl delete configmap ${CONFIGMAP_LOADPROFILE_NAME} -n ${K8S_NAMESPACE}
+#kubectl delete namespace ${K8S_NAMESPACE}
+
+echo
+echo "#### Docker cleanup ###"
 #docker stop $(docker ps -aq)
 #docker rm $(docker ps -aq)

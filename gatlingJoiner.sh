@@ -1,6 +1,6 @@
 #!/bin/bash
 
-. k8sProperties.sh
+. /usr/local/bin/k8sProperties.sh
 
 NUM_OF_NODES=$1
 
@@ -25,7 +25,7 @@ ${GATLING_HOME}/bin/gatling.sh -ro reports
 
 rm -rf ${GATLING_RESULTS_DIR}/reports/simulation-*.*
 echo "Zipping reports"
-tar -C ${GATLING_RESULTS_DIR}/ -cvf /gatling_run_dir/reports.tar reports/
+tar -C ${GATLING_RESULTS_DIR}/ -cf /gatling_run_dir/reports.tar reports/
 
 while true
 do
