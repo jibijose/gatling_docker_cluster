@@ -36,13 +36,9 @@ kubectl delete namespace ${K8S_NAMESPACE}
 kubectl create namespace ${K8S_NAMESPACE}
 
 echo
-echo `date`"   #### Creation of configmap  ${CONFIGMAP_LOADPROFILE_NAME} ###"
-kubectl create configmap ${CONFIGMAP_LOADPROFILE_NAME} --from-file=${LOAD_PROFILE_SCALA} -n ${K8S_NAMESPACE}
-#kubectl get configmap -n ${K8S_NAMESPACE}
+echo `date`"   #### Creation of configmap  ${CONFIGMAP_LOAD_PROFILE_SCALA} ###"
+kubectl create configmap ${CONFIGMAP_LOAD_PROFILE} --from-file=${K8SPROPERTIES} --from-file=${LOAD_PROFILE_SCALA} --from-file=${LOAD_PROFILE_JSON} -n ${K8S_NAMESPACE}
 
-echo
-echo `date`"   #### Creation of configmap  ${CONFIGMAP_K8S_PROPS_NAME} ###"
-kubectl create configmap ${CONFIGMAP_K8S_PROPS_NAME} --from-file=${K8SPROPERTIES} -n ${K8S_NAMESPACE}
 #kubectl get configmap -n ${K8S_NAMESPACE}
 
 echo `date`"   ######################################## deploy k8s ##################################################################"
@@ -117,8 +113,7 @@ echo `date`"   ######################################## cleanup ################
 echo
 echo `date`"   #### Kubectl cleanup ###"
 #kubectl delete -f ${K8S_DEPLOY_FILE_TEMP} -n ${K8S_NAMESPACE}
-#kubectl delete configmap ${CONFIGMAP_K8S_PROPS_NAME} -n ${K8S_NAMESPACE}
-#kubectl delete configmap ${CONFIGMAP_LOADPROFILE_NAME} -n ${K8S_NAMESPACE}
+#kubectl delete configmap ${CONFIGMAP_LOAD_PROFILE} -n ${K8S_NAMESPACE}
 #kubectl delete namespace ${K8S_NAMESPACE}
 
 echo

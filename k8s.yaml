@@ -61,10 +61,14 @@ spec:
       volumes:
         - name: copied-run-files
           configMap:
-            name: ${LOAD_PROFILE_SCALA}
+            name: ${CONFIGMAP_LOAD_PROFILE}
             items:
+            - key: "${K8SPROPERTIES}"
+              path: "${K8SPROPERTIES}"
             - key: "${LOAD_PROFILE_SCALA}"
               path: "${LOAD_PROFILE_SCALA}"
+            - key: "${LOAD_PROFILE_JSON}"
+              path: "${LOAD_PROFILE_JSON}"
         - name: pvc-data
           persistentVolumeClaim:
             claimName: my-azurefile
@@ -97,12 +101,24 @@ spec:
                 memory: ${JOINER_MEMORY_LIMIT}
                 cpu: ${JOINER_CPU_LIMIT}
           volumeMounts:
+            - name: copied-run-files
+              mountPath: ${GATLING_COPIED_DIR}
             - name: pvc-data
               mountPath: /pvc-data
           env:
             - name: NUM_OF_NODES
               value: "${NUM_OF_NODES}"
       volumes:
+        - name: copied-run-files
+          configMap:
+            name: ${CONFIGMAP_LOAD_PROFILE}
+            items:
+            - key: "${K8SPROPERTIES}"
+              path: "${K8SPROPERTIES}"
+            - key: "${LOAD_PROFILE_SCALA}"
+              path: "${LOAD_PROFILE_SCALA}"
+            - key: "${LOAD_PROFILE_JSON}"
+              path: "${LOAD_PROFILE_JSON}"
         - name: pvc-data
           persistentVolumeClaim:
             claimName: my-azurefile

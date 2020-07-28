@@ -1,6 +1,6 @@
 #!/bin/bash
 
-. /usr/local/bin/k8sProperties.sh
+. /gatling_run_dir/gatling-charts-highcharts-bundle-3.3.1/copied-run-files/k8sProperties.sh
 
 NUM_OF_NODES=$1
 
