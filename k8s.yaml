@@ -43,7 +43,7 @@ spec:
         version: v1
     spec:
       containers:
-        - image: registry.hub.docker.com/jibijose/gatlingnode:latest
+        - image: ${DOCKERHUB_NODE_IMAGE}
           imagePullPolicy: Always
           name: gatlingnode
           resources:
@@ -55,7 +55,7 @@ spec:
               cpu: ${NODE_MEMORY_LIMIT}
           volumeMounts:
             - name: copied-run-files
-              mountPath: /gatling_run_dir/gatling-charts-highcharts-bundle-3.3.1/copied-run-files
+              mountPath: ${DOCKER_GATLING_COPIED_DIR}
             - name: pvc-data
               mountPath: /pvc-data
       volumes:
@@ -86,16 +86,16 @@ spec:
         version: v1
     spec:
       containers:
-        - image: registry.hub.docker.com/jibijose/gatlingjoiner:latest
+        - image: ${DOCKERHUB_JOINER_IMAGE}
           imagePullPolicy: Always
           name: gatlingjoiner
           resources:
             requests:
-                memory: 2Gi
-                cpu: 1000m
+                memory: ${JOINER_CPU_REQUEST}
+                cpu: ${JOINER_MEMORY_REQUEST}
             limits:
-                memory: 2Gi
-                cpu: 1000m
+                memory: ${JOINER_CPU_LIMIT}
+                cpu: ${JOINER_MEMORY_LIMIT}
           volumeMounts:
             - name: pvc-data
               mountPath: /pvc-data
