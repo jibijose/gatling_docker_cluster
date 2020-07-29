@@ -104,13 +104,14 @@ DATENOW=`date "+%Y%m%d%H%M%S"`
 
 echo
 echo `date`"   #### Copying reports to local ###"
-kubectl cp ${K8S_NAMESPACE}/`kubectl get pods -n ${K8S_NAMESPACE} | grep "gatlingjoiner" | grep "Running" | grep "1/1" | tail -n 1 | awk '{print $1;}'`:/gatling_run_dir/reports.tar ./reports-${DATENOW}.tar
+kubectl cp ${K8S_NAMESPACE}/`kubectl get pods -n ${K8S_NAMESPACE} | grep "gatlingjoiner" | grep "Running" | grep "1/1" | tail -n 1 | awk '{print $1;}'`:/gatling_run_dir/reports.tar ./reports-${LOAD_PROFILE_NAME}-${DATENOW}.tar
 rm -rf reports
-tar -xf reports-${DATENOW}.tar
+tar -xf reports-${LOAD_PROFILE_NAME}-${DATENOW}.tar
+mv reports reports-${LOAD_PROFILE_NAME}-${DATENOW}
 
 echo
 echo `date`"   #### Opening reports ###"
-open reports/index.html
+open reports-${LOAD_PROFILE_NAME}-${DATENOW}/index.html
 
 echo `date`"   ######################################## cleanup #####################################################################"
 echo

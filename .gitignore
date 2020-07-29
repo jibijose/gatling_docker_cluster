@@ -1,5 +1,6 @@
 **/*_temp.properties
 **/*_temp.yaml
 **/reports/*
-**/reports-*.tar
+**/reports-*-*/*
+**/reports-*-*.tar
 
