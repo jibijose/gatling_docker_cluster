@@ -67,11 +67,11 @@ spec:
             name: ${CONFIGMAP_LOAD_PROFILE}
             items:
             - key: "${K8SPROPERTIES}"
-              path: "${K8SPROPERTIES}"
+              path: "${SCENRIO_ROOT_DIR}/${K8SPROPERTIES}"
             - key: "${LOAD_PROFILE_SCALA}"
-              path: "${LOAD_PROFILE_SCALA}"
+              path: "${SCENRIO_ROOT_DIR}/${LOAD_PROFILE_SCALA}"
             - key: "${LOAD_PROFILE_JSON}"
-              path: "${LOAD_PROFILE_JSON}"
+              path: "${SCENRIO_ROOT_DIR}/${LOAD_PROFILE_JSON}"
         - name: pvc-data
           persistentVolumeClaim:
             claimName: my-azurefile
@@ -119,11 +119,7 @@ spec:
             name: ${CONFIGMAP_LOAD_PROFILE}
             items:
             - key: "${K8SPROPERTIES}"
-              path: "${K8SPROPERTIES}"
-            - key: "${LOAD_PROFILE_SCALA}"
-              path: "${LOAD_PROFILE_SCALA}"
-            - key: "${LOAD_PROFILE_JSON}"
-              path: "${LOAD_PROFILE_JSON}"
+              path: "${SCENRIO_ROOT_DIR}/${K8SPROPERTIES}"
         - name: pvc-data
           persistentVolumeClaim:
             claimName: my-azurefile

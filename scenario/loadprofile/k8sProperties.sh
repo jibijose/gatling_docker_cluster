@@ -42,6 +42,7 @@ CONFIGMAP_LOAD_PROFILE=${LOAD_PROFILE_NAME}
 K8S_DEPLOY_FILE_TEMP=k8s_temp.yaml
 DOCKERHUB_NODE_IMAGE=${DOCKER_HOST}/${DOCKER_USER}/gatlingnode:latest
 DOCKERHUB_JOINER_IMAGE=${DOCKER_HOST}/${DOCKER_USER}/gatlingjoiner:latest
+SCENRIO_ROOT_DIR=scenario/${LOAD_PROFILE_NAME}
 
 GATLING_HOME=/gatling_run_dir/gatling-charts-highcharts-bundle-3.3.1
 GATLING_SIMULATIONS_DIR=${GATLING_HOME}/user-files/simulations

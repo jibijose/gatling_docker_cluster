@@ -12,7 +12,7 @@ deployFlag=$3
 reportFlag=$4
 cleanupFlag=$5
 
-. k8sProperties.sh $load_profile
+. scenario/${load_profile}/k8sProperties.sh ${load_profile}
 
 
 if [ $buildFlag == true ]
@@ -44,7 +44,7 @@ then
 
     echo
     echo `date`"   #### Creation of configmap  ${CONFIGMAP_LOAD_PROFILE_SCALA} ###"
-    kubectl create configmap ${CONFIGMAP_LOAD_PROFILE} --from-file=${K8SPROPERTIES} --from-file=${LOAD_PROFILE_SCALA} --from-file=${LOAD_PROFILE_JSON} -n ${K8S_NAMESPACE}
+    kubectl create configmap ${CONFIGMAP_LOAD_PROFILE} --from-file=${SCENRIO_ROOT_DIR}/${K8SPROPERTIES} --from-file=${SCENRIO_ROOT_DIR}/${LOAD_PROFILE_SCALA} --from-file=${SCENRIO_ROOT_DIR}/${LOAD_PROFILE_JSON} -n ${K8S_NAMESPACE}
 
     #kubectl get configmap -n ${K8S_NAMESPACE}
 
@@ -59,14 +59,13 @@ then
             #value="${value//"latest"/"hehe"}"
             #echo $value
             sed -i "" "s/\${$key}/${value}/g" ${K8S_DEPLOY_FILE_TEMP}
-        done < ${K8SPROPERTIES}
+        done < ${SCENRIO_ROOT_DIR}/${K8SPROPERTIES}
     }
 
     cp ${K8S_DEPLOY_FILE} ${K8S_DEPLOY_FILE_TEMP}
     replaceK8sPropertiesInYaml
     echo `date`"   #### Applying kubernetes yaml into namespace ${K8S_NAMESPACE} ###"
     kubectl apply -f ${K8S_DEPLOY_FILE_TEMP} -n ${K8S_NAMESPACE}
-    rm -rf ${K8S_DEPLOY_FILE_TEMP}
 fi
 
 #echo `date`"   ######################################## kubectl stats/logs ##########################################################"
@@ -128,12 +127,10 @@ then
     echo `date`"   ######################################## cleanup #####################################################################"
     echo
     echo `date`"   #### Kubectl cleanup ###"
-    #kubectl delete -f ${K8S_DEPLOY_FILE_TEMP} -n ${K8S_NAMESPACE}
-    #kubectl delete configmap ${CONFIGMAP_LOAD_PROFILE} -n ${K8S_NAMESPACE}
-    #kubectl delete namespace ${K8S_NAMESPACE}
-
-    echo
-    echo `date`"   #### Docker cleanup ###"
-    #docker stop $(docker ps -aq)
-    #docker rm $(docker ps -aq)
+    kubectl delete -f ${K8S_DEPLOY_FILE_TEMP} -n ${K8S_NAMESPACE}
+    rm -rf ${K8S_DEPLOY_FILE_TEMP}
+    kubectl delete configmap ${CONFIGMAP_LOAD_PROFILE} -n ${K8S_NAMESPACE}
+    kubectl delete namespace ${K8S_NAMESPACE}
+    rm -rf reports-${LOAD_PROFILE_NAME}-*.tar
+    rm -rf reports-${LOAD_PROFILE_NAME}-*
 fi
