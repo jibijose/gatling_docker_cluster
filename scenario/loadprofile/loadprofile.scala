@@ -5,13 +5,13 @@ import scala.concurrent.duration._
 class loadprofile extends Simulation {
 
   val httpProtocol = http
-    .baseUrl("https://httpbin.org") // Here is the root for all relative URLs
+    .baseUrl("http://worldtimeapi.org") // Here is the root for all relative URLs
     .userAgentHeader("Mozilla/5.0 (Macintosh; Intel Mac OS X 10.8; rv:16.0) Gecko/20100101 Firefox/16.0")
 
   val scn100milli = scenario("Scenario delay 1 second delay") // A scenario is a chain of requests and pauses
     .exec(
-      http("request_delay_${HOSTNAME}")
-        .get("/delay/1")
+      http("request_api_${HOSTNAME}")
+        .get("/api/ip")
       .check(status.is(200))
     );
 
