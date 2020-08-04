@@ -26,22 +26,21 @@ spec:
         requests:
           storage: ${PVC_SIZE}
 ---
-apiVersion: apps/v1
-kind: Deployment
+apiVersion: batch/v1
+kind: Job
 metadata:
   name: gatlingnode
 spec:
-  selector:
-    matchLabels:
-        app: gatlingnode
-        version: v1
-  replicas: ${NUM_OF_NODES}
+  backoffLimit: 0
+  parallelism: ${NUM_OF_NODES}
+  completions: ${NUM_OF_NODES}
   template:
     metadata:
       labels:
         app: gatlingnode
         version: v1
     spec:
+      restartPolicy: Never
       containers:
         - image: ${DOCKERHUB_NODE_IMAGE}
           imagePullPolicy: Always

@@ -24,8 +24,4 @@ ${GATLING_HOME}/bin/gatling.sh -nr -s ${LOAD_PROFILE_NAME} > run.log
 
 cp ${GATLING_HOME}/results/${LOAD_PROFILE_NAME}-*/simulation.log ${PVC_DATA}/simulation-${HOSTNAME}.log
 
-while true
-do
-	echo `date`"   Waiting..."
-	sleep ${RUN_TIME_INTERVAL}
-done
+echo "Gatling node completed successfully"
