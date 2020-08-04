@@ -11,7 +11,7 @@ NUM_OF_NODES=$2
 
 while true
 do
-	numofnodes=`ls -al /pvc-data | grep simulation | wc -l`
+	numofnodes=`ls -al ${PVC_DATA} | grep simulation | wc -l`
 	if [ $numofnodes == $NUM_OF_NODES ]
 	then
 		echo `date`"   Jobs completed in nodes $numofnodes"
@@ -40,9 +40,6 @@ ${GATLING_HOME}/bin/gatling.sh -ro reports
 rm -rf ${GATLING_RESULTS_DIR}/reports/simulation-*.*
 echo "Zipping reports"
 tar -C ${GATLING_RESULTS_DIR}/ -cf /gatling_run_dir/reports.tar reports/
+cp /gatling_run_dir/reports.tar ${PVC_DATA}/reports.tar
 
-while true
-do
-	echo `date`"   Waiting after completion..."
-	sleep ${RUN_TIME_INTERVAL}
-done
+echo "Gatling joiner completed successfully"

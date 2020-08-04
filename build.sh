@@ -80,14 +80,14 @@ if [ $reportFlag == true ]
 then
     echo `date`"   ######################################## copy combined gatling report ################################################"
     function waitForReports() {
-        GATLING_JOINER_POD=`kubectl get pods -n ${K8S_NAMESPACE} | grep "gatlingjoiner" | grep "Running" | grep "1/1" | tail -n 1 | awk '{print $1;}'`
+        GATLING_JOINER_POD=`kubectl get pods -n ${K8S_NAMESPACE} | grep "gatlingjoiner" | grep 'Running\|Completed' | tail -n 1 | awk '{print $1;}'`
         while true
         do
             if [ -z $GATLING_JOINER_POD ]
             then
-                echo "gatling joiner pod is not running. Waiting..."
+                echo "gatling joiner pod is not running or not completed. Waiting..."
                 sleep ${BUILD_TIME_INTERVAL}
-                GATLING_JOINER_POD=`kubectl get pods -n ${K8S_NAMESPACE} | grep "gatlingjoiner" | grep "Running" | grep "1/1" | tail -n 1 | awk '{print $1;}'`
+                GATLING_JOINER_POD=`kubectl get pods -n ${K8S_NAMESPACE} | grep "gatlingjoiner" | grep 'Running\|Completed' | tail -n 1 | awk '{print $1;}'`
             else
                 echo "gatling joined pod $GATLING_JOINER_POD"
                 break
@@ -95,7 +95,7 @@ then
         done
         while true
         do
-            successmsgcount=`kubectl logs $GATLING_JOINER_POD -n ${K8S_NAMESPACE} | grep "Waiting after completion" | wc -l`
+            successmsgcount=`kubectl logs $GATLING_JOINER_POD -n ${K8S_NAMESPACE} | grep "Gatling joiner completed successfully" | wc -l`
             if [ $successmsgcount -gt 0 ]
             then
                 echo "Report generated. Continuing..."
@@ -112,7 +112,7 @@ then
 
     echo
     echo `date`"   #### Copying reports to local ###"
-    kubectl cp ${K8S_NAMESPACE}/`kubectl get pods -n ${K8S_NAMESPACE} | grep "gatlingjoiner" | grep "Running" | grep "1/1" | tail -n 1 | awk '{print $1;}'`:/gatling_run_dir/reports.tar ./reports-${LOAD_PROFILE_NAME}-${DATENOW}.tar
+    kubectl cp ${K8S_NAMESPACE}/gatlingpuller:${PVC_DATA}/reports.tar ./reports-${LOAD_PROFILE_NAME}-${DATENOW}.tar
     rm -rf reports
     tar -xf reports-${LOAD_PROFILE_NAME}-${DATENOW}.tar
     mv reports reports-${LOAD_PROFILE_NAME}-${DATENOW}

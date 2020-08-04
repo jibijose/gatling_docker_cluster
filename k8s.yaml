@@ -56,7 +56,7 @@ spec:
             - name: copied-run-files
               mountPath: ${GATLING_COPIED_DIR}
             - name: pvc-data
-              mountPath: /pvc-data
+              mountPath: ${PVC_DATA}
           env:
             - name: LOAD_PROFILE_NAME
               value: "${LOAD_PROFILE_NAME}"
@@ -75,22 +75,21 @@ spec:
           persistentVolumeClaim:
             claimName: my-azurefile
 ---
-apiVersion: apps/v1
-kind: Deployment
+apiVersion: batch/v1
+kind: Job
 metadata:
   name: gatlingjoiner
 spec:
-  selector:
-    matchLabels:
-        app: gatlingjoiner
-        version: v1
-  replicas: 1
+  backoffLimit: 0
+  parallelism: 1
+  completions: 1
   template:
     metadata:
       labels:
         app: gatlingjoiner
         version: v1
     spec:
+      restartPolicy: Never
       containers:
         - image: ${DOCKERHUB_JOINER_IMAGE}
           imagePullPolicy: Always
@@ -106,7 +105,7 @@ spec:
             - name: copied-run-files
               mountPath: ${GATLING_COPIED_DIR}
             - name: pvc-data
-              mountPath: /pvc-data
+              mountPath: ${PVC_DATA}
           env:
             - name: LOAD_PROFILE_NAME
               value: "${LOAD_PROFILE_NAME}"
@@ -122,4 +121,20 @@ spec:
         - name: pvc-data
           persistentVolumeClaim:
             claimName: my-azurefile
-            
+---
+apiVersion: v1
+kind: Pod
+metadata:
+    name: gatlingpuller
+spec:
+  containers:
+    - name: alpine
+      image: alpine:latest
+      command: ['sleep', 'infinity']
+      volumeMounts:
+        - name: pvc-data
+          mountPath: ${PVC_DATA}
+  volumes:
+    - name: pvc-data
+      persistentVolumeClaim:
+        claimName: my-azurefile
