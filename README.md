@@ -10,7 +10,10 @@ $ ./run.sh
 Usage: ./run.sh load_profile build_flag deploy_flag report_flag cleanup_flag
 ```
 Example
-$ ./run.sh loadprofile false true true false
+$ ./run.sh loadprofile false true true false  
+
+![Gatling cluster data flow](assets/gatling_docker_cluster_diagram.png) 
+
 
 ### Build
 $ ./run.sh loadprofile true false false false
@@ -85,8 +88,9 @@ Wed Aug 5 07:26:58 IST 2020   #### Copying reports to local ###
 tar: removing leading '/' from member names
 
 Wed Aug 5 07:27:03 IST 2020   #### Opening reports ###
-```
+```  
 
+![Gatling cluster report](assets/loadprofile_report.png) 
 ### Cleanup
 $ ./run.sh loadprofile false false false true
 
